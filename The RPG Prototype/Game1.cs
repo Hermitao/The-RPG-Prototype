@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -11,11 +12,22 @@ namespace The_RPG_Prototype
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        
+        SpriteFont Square;
+        bool shouldBeFullScreen;
+
+        Player player;
+
+        public enum Direction
+        {
+            Horizontal,
+            Vertical
+        }
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            shouldBeFullScreen = false;
         }
 
         /// <summary>
@@ -27,6 +39,15 @@ namespace The_RPG_Prototype
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            if (shouldBeFullScreen)
+            {
+                graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+                graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+                graphics.IsFullScreen = true;
+                graphics.ApplyChanges();
+            }
+
+            player = new Player((float)graphics.PreferredBackBufferWidth / 2, (float)graphics.PreferredBackBufferHeight / 2, Keys.A, Keys.D, Keys.S, Keys.Space);
 
             base.Initialize();
         }
@@ -41,6 +62,10 @@ namespace The_RPG_Prototype
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            Texture2D idleTexture = Content.Load<Texture2D>("Nioda_Idle");
+            Texture2D runningTexture = Content.Load<Texture2D>("Nioda_Running");
+            Square = Content.Load<SpriteFont>("Square");
+            player.LoadContent(idleTexture, runningTexture);
         }
 
         /// <summary>
@@ -63,6 +88,7 @@ namespace The_RPG_Prototype
                 Exit();
 
             // TODO: Add your update logic here
+            player.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -76,6 +102,11 @@ namespace The_RPG_Prototype
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            player.Draw(spriteBatch);
+
+            spriteBatch.Begin();
+            spriteBatch.DrawString(Square, "The RPG Prototype - Early Indev", new Vector2(10f, 10f), Color.White);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
