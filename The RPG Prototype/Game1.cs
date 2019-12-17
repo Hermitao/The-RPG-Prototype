@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -17,17 +16,23 @@ namespace The_RPG_Prototype
 
         Player player;
 
-        public enum Direction
-        {
-            Horizontal,
-            Vertical
-        }
+        public const float gravityX = 0f;
+        public const float gravityY = 9.8f;
+
+        public static float deltaTime;
+
+        // Work in progress
+        //public enum Direction
+        //{
+        //    Horizontal,
+        //    Vertical
+        //}
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            shouldBeFullScreen = false;
+            shouldBeFullScreen = true;
         }
 
         /// <summary>
@@ -39,6 +44,7 @@ namespace The_RPG_Prototype
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+
             if (shouldBeFullScreen)
             {
                 graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
@@ -47,7 +53,7 @@ namespace The_RPG_Prototype
                 graphics.ApplyChanges();
             }
 
-            player = new Player((float)graphics.PreferredBackBufferWidth / 2, (float)graphics.PreferredBackBufferHeight / 2, Keys.A, Keys.D, Keys.S, Keys.Space);
+            player = new Player((float)graphics.PreferredBackBufferWidth / 2, (float)graphics.PreferredBackBufferHeight /2, Keys.A, Keys.D, Keys.S, Keys.Space);
 
             base.Initialize();
         }
@@ -84,6 +90,7 @@ namespace The_RPG_Prototype
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
