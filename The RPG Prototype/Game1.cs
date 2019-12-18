@@ -31,7 +31,7 @@ namespace The_RPG_Prototype
         public static KeyboardState keyboardState;
         public static KeyboardState previousKeyboardState;
 
-        public bool debugScreen;
+        public bool debugOverlay;
 
         // Work in progress
         //public enum Direction
@@ -45,7 +45,7 @@ namespace The_RPG_Prototype
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             shouldBeFullScreen = true;
-            debugScreen = true;
+            debugOverlay = true;
         }
 
         /// <summary>
@@ -120,7 +120,21 @@ namespace The_RPG_Prototype
 
             if (keyboardState.IsKeyDown(Keys.F3) && previousKeyboardState.IsKeyUp(Keys.F3))
             {
-                debugScreen = !debugScreen;
+                debugOverlay = !debugOverlay;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.OemPlus))
+            {
+                if (cam.Zoom < 2f)
+                {
+                    cam.Zoom = 2f;
+                }
+            } else if (keyboardState.IsKeyDown(Keys.OemMinus))
+            {
+                if (cam.Zoom > 1f)
+                {
+                    cam.Zoom = 1f;
+                }
             }
 
             // TODO: Add your update logic here
@@ -163,7 +177,7 @@ namespace The_RPG_Prototype
             spriteBatch.DrawString(Square, "The RPG Prototype - Early Indev", new Vector2(10f, 10f), Color.White);
             spriteBatch.End();
 
-            if (debugScreen)
+            if (debugOverlay)
             {
                 DebugScreen();
             }
@@ -174,10 +188,10 @@ namespace The_RPG_Prototype
         void DebugScreen()
         {
             spriteBatch.Begin();
-            spriteBatch.DrawString(Square, "Mouse X: " + mouseWorldPos.X, new Vector2(10f, 40f), Color.DarkGray);
-            spriteBatch.DrawString(Square, "Mouse Y:" + mouseWorldPos.Y, new Vector2(10f, 70f), Color.DarkGray);
-            spriteBatch.DrawString(Square, "X: " + player.transform.position.X, new Vector2(10f, 100f), Color.DarkGray);
-            spriteBatch.DrawString(Square, "Y: " + player.transform.position.Y, new Vector2(10f, 130f), Color.DarkGray);
+            spriteBatch.DrawString(Square, "Mouse X: " + mouseWorldPos.X, new Vector2(10f, 40f), Color.LightGray);
+            spriteBatch.DrawString(Square, "Mouse Y:" + mouseWorldPos.Y, new Vector2(10f, 70f), Color.LightGray);
+            spriteBatch.DrawString(Square, "X: " + player.transform.position.X, new Vector2(10f, 100f), Color.LightGray);
+            spriteBatch.DrawString(Square, "Y: " + player.transform.position.Y, new Vector2(10f, 130f), Color.LightGray);
             spriteBatch.End();
         }
     }
