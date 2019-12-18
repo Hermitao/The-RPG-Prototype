@@ -7,14 +7,13 @@ namespace The_RPG_Prototype
 {
     class Player
     {
-        Transform transform;
-        Rigidbody rigidbody;
+        public Transform transform;
+        public Rigidbody rigidbody;
 
         float maxSpeed;
         AnimatedSprite idleAnim;
         AnimatedSprite runningAnim;
         
-        KeyboardState keyboardState;
         Keys myLeftKey;
         Keys myRightKey;
         Keys myDownKey;
@@ -48,7 +47,7 @@ namespace The_RPG_Prototype
             }
 
             transform.position = new Vector2(playerXPosition, playerYPosition);
-            maxSpeed = 500f;
+            maxSpeed = 250f;
 
             myLeftKey = leftKey;
             myRightKey = rightKey;
@@ -74,17 +73,17 @@ namespace The_RPG_Prototype
             runningAnim = new AnimatedSprite(runningTexture, 1, 8, 12f);
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, KeyboardState myKeyboardState)
         {
-            keyboardState = Keyboard.GetState();
+            
 
-            if (keyboardState.IsKeyDown(myLeftKey))
+            if (myKeyboardState.IsKeyDown(myLeftKey))
             {
                 isMovingLeft = true;
                 isFacingRight = false;
                 movementMultiplier = -1f;
             } else { isMovingLeft = false; }
-            if (keyboardState.IsKeyDown(myRightKey))
+            if (myKeyboardState.IsKeyDown(myRightKey))
             {
                 isMovingRight = true;
                 isFacingRight = true;

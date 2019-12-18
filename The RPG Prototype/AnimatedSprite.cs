@@ -49,12 +49,11 @@ namespace The_RPG_Prototype
 
             Rectangle sourceRectangle = new Rectangle(width * column, height * row, width, height);
             Rectangle destinationRectangle;
-            destinationRectangle = new Rectangle((int)location.X, (int)location.Y, width * 2, height * 2);
+            destinationRectangle = new Rectangle((int)location.X, (int)location.Y, width, height);
 
             float originX = (float)width / 2f;
             float originY = (float)height / 2f;
 
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
             if (!flipX)
             {
                 spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White, 0f, new Vector2(originX, originY), SpriteEffects.None, 0f);
@@ -62,7 +61,6 @@ namespace The_RPG_Prototype
             {
                 spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White, 0f, new Vector2(originX, originY), SpriteEffects.FlipHorizontally, 0f);
             }
-            spriteBatch.End();
         }
     }
 }
