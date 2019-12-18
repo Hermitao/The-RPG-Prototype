@@ -33,6 +33,11 @@ namespace The_RPG_Prototype
 
         public bool debugOverlay;
 
+        public static int initialResolutionX;
+        public static int initialResolutionY;
+
+        private int blockSize;
+
         // Work in progress
         //public enum Direction
         //{
@@ -46,6 +51,7 @@ namespace The_RPG_Prototype
             Content.RootDirectory = "Content";
             shouldBeFullScreen = true;
             debugOverlay = true;
+            blockSize = 32;
         }
 
         /// <summary>
@@ -57,6 +63,8 @@ namespace The_RPG_Prototype
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            initialResolutionX = graphics.PreferredBackBufferWidth;
+            initialResolutionY = graphics.PreferredBackBufferHeight;
 
             this.IsMouseVisible = true;
             if (shouldBeFullScreen)
@@ -67,7 +75,7 @@ namespace The_RPG_Prototype
                 graphics.ApplyChanges();
             }
 
-            player = new Player((float)graphics.PreferredBackBufferWidth / 2, (float)graphics.PreferredBackBufferHeight /2, Keys.A, Keys.D, Keys.S, Keys.Space);
+            player = new Player(0f, 0f, Keys.A, Keys.D, Keys.S, Keys.Space);
 
             cam = new Camera2D
             {
@@ -122,6 +130,20 @@ namespace The_RPG_Prototype
             {
                 debugOverlay = !debugOverlay;
             }
+            if (keyboardState.IsKeyDown(Keys.F11) && previousKeyboardState.IsKeyUp(Keys.F11))
+            {
+                if (graphics.IsFullScreen)
+                {
+                    graphics.PreferredBackBufferWidth = initialResolutionX;
+                    graphics.PreferredBackBufferHeight = initialResolutionY;
+                } else
+                {
+                    graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+                    graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+                }
+                graphics.IsFullScreen = !graphics.IsFullScreen;
+                graphics.ApplyChanges();
+            }
 
             if (keyboardState.IsKeyDown(Keys.OemPlus))
             {
@@ -148,7 +170,6 @@ namespace The_RPG_Prototype
             //normalizedCamTarget.Normalize();
             cam.Move((normalizedCamTarget), .09f);
 
-
             previousKeyboardState = keyboardState;
             base.Update(gameTime);
         }
@@ -170,7 +191,7 @@ namespace The_RPG_Prototype
                         null,
                         cam.get_transformation(GraphicsDevice /*Send the variable that has your graphic device here*/));
             player.Draw(spriteBatch);
-            tileset.Draw(spriteBatch, new Vector2(0, graphics.PreferredBackBufferHeight / 2f + 64f));
+            tileset.Draw(spriteBatch, new Vector2(0, 64));
             spriteBatch.End();
 
             spriteBatch.Begin();
@@ -188,10 +209,17 @@ namespace The_RPG_Prototype
         void DebugScreen()
         {
             spriteBatch.Begin();
-            spriteBatch.DrawString(Square, "Mouse X: " + mouseWorldPos.X, new Vector2(10f, 40f), Color.LightGray);
-            spriteBatch.DrawString(Square, "Mouse Y:" + mouseWorldPos.Y, new Vector2(10f, 70f), Color.LightGray);
-            spriteBatch.DrawString(Square, "X: " + player.transform.position.X, new Vector2(10f, 100f), Color.LightGray);
-            spriteBatch.DrawString(Square, "Y: " + player.transform.position.Y, new Vector2(10f, 130f), Color.LightGray);
+            spriteBatch.DrawString(Square, "Blocks" , new Vector2(10f, 40f), Color.LightGray);
+            spriteBatch.DrawString(Square, "Mouse X (" + mouseWorldPos.X / blockSize + ")", new Vector2(10f, 70f), Color.LightGray);
+            spriteBatch.DrawString(Square, "Mouse Y (" + mouseWorldPos.Y / blockSize + ")", new Vector2(10f, 100f), Color.LightGray);
+            spriteBatch.DrawString(Square, "X (" + player.transform.position.X / blockSize + ")", new Vector2(10f, 130f), Color.LightGray);
+            spriteBatch.DrawString(Square, "Y (" + player.transform.position.Y / blockSize + ")", new Vector2(10f, 160f), Color.LightGray);
+
+            spriteBatch.DrawString(Square, "Units", new Vector2(10f, 210f), Color.LightGray);
+            spriteBatch.DrawString(Square, "Mouse X: " + mouseWorldPos.X, new Vector2(10f, 240f), Color.LightGray);
+            spriteBatch.DrawString(Square, "Mouse Y:" + mouseWorldPos.Y, new Vector2(10f, 270f), Color.LightGray);
+            spriteBatch.DrawString(Square, "X: " + player.transform.position.X, new Vector2(10f, 300f), Color.LightGray);
+            spriteBatch.DrawString(Square, "Y: " + player.transform.position.Y, new Vector2(10f, 330f), Color.LightGray);
             spriteBatch.End();
         }
     }

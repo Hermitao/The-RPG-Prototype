@@ -44,7 +44,7 @@ namespace The_RPG_Prototype
                 for (int x = 0; x < chunkSize; x++)
                 {
                     destinationRectangle = new Rectangle((int)location.X, (int)location.Y, width, height);
-                    spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White, 0f, new Vector2(originX, originY), SpriteEffects.None, 0f);
+                    spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White, 0f, new Vector2(0f, 0f), SpriteEffects.None, 0f);
                     location.X += TileSize;
                 }
                 location.X = startXLocation;
