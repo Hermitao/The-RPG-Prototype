@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 
 namespace The_RPG_Prototype
 {
@@ -16,6 +17,8 @@ namespace The_RPG_Prototype
         AnimatedSprite jumpAnim;
         AnimatedSprite fallAnim;
         AnimatedSprite crouchMoveAnim;
+
+        SoundEffect footstep;
         
         Keys myLeftKey;
         Keys myRightKey;
@@ -84,7 +87,7 @@ namespace The_RPG_Prototype
             runningAnim = new AnimatedSprite(runningTexture, 1, 6, 9f);
             crouchAnim = new AnimatedSprite(crouchTexture, 1, 4, 4f);
             jumpAnim = new AnimatedSprite(jumpTexture, 1, 1, 1f);
-            fallAnim = new AnimatedSprite(fallTexture, 1, 2, 8f);
+            fallAnim = new AnimatedSprite(fallTexture, 1, 2, 4f);
         }
 
         public void Update(GameTime gameTime, KeyboardState myKeyboardState, KeyboardState myPreviousKeyboardState)
@@ -147,7 +150,6 @@ namespace The_RPG_Prototype
             resistance = (density * dragCoefficient * area) / 2f * (float)Math.Pow(rigidbody.velocity.X, 2);
             
             rigidbody.velocity.X = maxSpeed * movementMultiplier;
-            
             rigidbody.Update(gameTime);
         }
 

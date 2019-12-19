@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="AnimatedSprite.cs" />
     <Compile Include="Camera2D.cs" />
+    <Compile Include="GameObject.cs" />
     <Compile Include="Rigidbody.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Player.cs" />

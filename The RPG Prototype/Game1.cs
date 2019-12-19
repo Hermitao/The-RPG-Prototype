@@ -9,6 +9,8 @@ namespace The_RPG_Prototype
     /// </summary>
     public class Game1 : Game
     {
+        public static string GameVersion = "Indev 0.1.0a";
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteFont Square;
@@ -38,6 +40,10 @@ namespace The_RPG_Prototype
         public static int initialResolutionY;
 
         private int blockSize;
+
+        int totalFrames = 0;
+        float frameElapsedTime = 0.0f;
+        int fps = 0;
 
         // Work in progress
         //public enum Direction
@@ -102,7 +108,6 @@ namespace The_RPG_Prototype
             Texture2D jumpTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_Jump_50x37");
             Texture2D fallTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_Fall_50x37");
             Texture2D crouchTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_Crouch_50x37");
-
 
             Square = Content.Load<SpriteFont>("Square");
             player.LoadContent(idleTexture, runningTexture, crouchTexture, jumpTexture, fallTexture);
@@ -177,7 +182,16 @@ namespace The_RPG_Prototype
 
             player.Update(gameTime, keyboardState, previousKeyboardState);
             previousKeyboardState = keyboardState;
-            
+
+            frameElapsedTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            if (frameElapsedTime >= 1000f)
+            {
+                fps = totalFrames;
+                totalFrames = 0;
+                frameElapsedTime = 0;
+            }
+
             base.Update(gameTime);
         }
 
@@ -187,6 +201,7 @@ namespace The_RPG_Prototype
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            totalFrames++;
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
@@ -198,11 +213,11 @@ namespace The_RPG_Prototype
                         null,
                         cam.get_transformation(GraphicsDevice /*Send the variable that has your graphic device here*/));
             player.Draw(spriteBatch);
-            tileset.Draw(spriteBatch, new Vector2(0, 64));
+            tileset.Draw(spriteBatch, new Vector2(0, 17));
             spriteBatch.End();
 
             spriteBatch.Begin();
-            spriteBatch.DrawString(Square, "The RPG Prototype - Early Indev", new Vector2(10f, 10f), Color.White);
+            spriteBatch.DrawString(Square, "The RPG Prototype - " + GameVersion, new Vector2(10f, 10f), Color.White);
             spriteBatch.End();
 
             if (debugOverlay)
@@ -215,20 +230,36 @@ namespace The_RPG_Prototype
 
         void DebugScreen()
         {
+            float titlePosY = 10f;
+            float spacing = 20f;
+            float n = 2f;
             spriteBatch.Begin();
-            spriteBatch.DrawString(Square, "Blocks" , new Vector2(10f, 40f), Color.LightGray);
-            spriteBatch.DrawString(Square, "Mouse X (" + mouseWorldPos.X / blockSize + ")", new Vector2(10f, 70f), Color.LightGray);
-            spriteBatch.DrawString(Square, "Mouse Y (" + mouseWorldPos.Y / blockSize + ")", new Vector2(10f, 100f), Color.LightGray);
-            spriteBatch.DrawString(Square, "X (" + player.transform.position.X / blockSize + ")", new Vector2(10f, 130f), Color.LightGray);
-            spriteBatch.DrawString(Square, "Y (" + player.transform.position.Y / blockSize + ")", new Vector2(10f, 160f), Color.LightGray);
+            spriteBatch.DrawString(Square, string.Format("FPS: {0}", fps), new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            n+=2;
+            spriteBatch.DrawString(Square, "Blocks" , new Vector2(10f, titlePosY + spacing*n), Color.LightGray);
+            n++;
+            spriteBatch.DrawString(Square, "Mouse X (" + mouseWorldPos.X / blockSize + ")", new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            n++;
+            spriteBatch.DrawString(Square, "Mouse Y (" + mouseWorldPos.Y / blockSize + ")", new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            n++;
+            spriteBatch.DrawString(Square, "X (" + player.transform.position.X / blockSize + ")", new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            n++;
+            spriteBatch.DrawString(Square, "Y (" + player.transform.position.Y / blockSize + ")", new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            n += 2f;
 
-            spriteBatch.DrawString(Square, "Units", new Vector2(10f, 210f), Color.LightGray);
-            spriteBatch.DrawString(Square, "Mouse X: " + mouseWorldPos.X, new Vector2(10f, 240f), Color.LightGray);
-            spriteBatch.DrawString(Square, "Mouse Y:" + mouseWorldPos.Y, new Vector2(10f, 270f), Color.LightGray);
-            spriteBatch.DrawString(Square, "X: " + player.transform.position.X, new Vector2(10f, 300f), Color.LightGray);
-            spriteBatch.DrawString(Square, "Y: " + player.transform.position.Y, new Vector2(10f, 330f), Color.LightGray);
+            spriteBatch.DrawString(Square, "Units", new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            n++;
+            spriteBatch.DrawString(Square, "Mouse X: " + mouseWorldPos.X, new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            n++;
+            spriteBatch.DrawString(Square, "Mouse Y:" + mouseWorldPos.Y, new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            n++;
+            spriteBatch.DrawString(Square, "X: " + player.transform.position.X, new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            n++;
+            spriteBatch.DrawString(Square, "Y: " + player.transform.position.Y, new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            n += 2f;
 
-            spriteBatch.DrawString(Square, "Is Grounded: " + player.rigidbody.isGrounded, new Vector2(10f, 390f), Color.LightGray);
+            spriteBatch.DrawString(Square, "Is Grounded: " + player.rigidbody.isGrounded, new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            n++;
             spriteBatch.End();
         }
     }
