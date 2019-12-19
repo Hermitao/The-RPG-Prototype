@@ -13,12 +13,6 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Audio/Music/bird_whistling_a.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Audio/Music/bird_whistling_a.mp3
-
 #begin Audio/SFX/FootstepGrass_1.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -72,6 +66,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Spritesheets/Adventurer_Jump_50x37.png
+
+#begin Spritesheets/Adventurer_JumpCharge_50x37.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Spritesheets/Adventurer_JumpCharge_50x37.png
 
 #begin Spritesheets/Adventurer_Run_50x37.png
 /importer:TextureImporter

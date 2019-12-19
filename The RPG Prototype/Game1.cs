@@ -9,13 +9,14 @@ namespace The_RPG_Prototype
     /// </summary>
     public class Game1 : Game
     {
-        public static string GameVersion = "Indev 0.0.0a";
+        public static string GameVersion = "Indev 0.0.1a";
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteFont Square;
         bool shouldBeFullScreen;
 
+        Actor playerActor;
         Player player;
         Tileset tileset;
         Texture2D tilesetTexture;
@@ -82,7 +83,8 @@ namespace The_RPG_Prototype
                 graphics.ApplyChanges();
             }
 
-            player = new Player(0f, 0f, Keys.A, Keys.D, Keys.S, Keys.Space);
+            playerActor = new Actor();
+            player = playerActor.player;
 
             cam = new Camera2D
             {
@@ -105,12 +107,13 @@ namespace The_RPG_Prototype
             // TODO: use this.Content to load your game content here
             Texture2D idleTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_Idle_50x37");
             Texture2D runningTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_Run_50x37");
-            Texture2D jumpTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_Jump_50x37");
-            Texture2D fallTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_Fall_50x37");
             Texture2D crouchTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_Crouch_50x37");
-
+            Texture2D jumpTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_Jump_50x37");
+            Texture2D jumpChargeTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_JumpCharge_50x37");
+            Texture2D fallTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_Fall_50x37");
+            
             Square = Content.Load<SpriteFont>("Square");
-            player.LoadContent(idleTexture, runningTexture, crouchTexture, jumpTexture, fallTexture);
+            player.LoadContent(idleTexture, runningTexture, crouchTexture, jumpTexture, jumpChargeTexture, fallTexture);
             tilesetTexture = Content.Load<Texture2D>("Tilesets/Spritesheet");
             tileset = new Tileset(tilesetTexture, 1, 2, 32);
             pixel = Content.Load<Texture2D>("white pixel");
