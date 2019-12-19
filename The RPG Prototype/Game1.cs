@@ -9,7 +9,7 @@ namespace The_RPG_Prototype
     /// </summary>
     public class Game1 : Game
     {
-        public static string GameVersion = "Indev 0.1.0a";
+        public static string GameVersion = "Indev 0.0.0a";
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
