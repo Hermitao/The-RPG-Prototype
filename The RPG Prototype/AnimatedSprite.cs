@@ -14,6 +14,11 @@ namespace The_RPG_Prototype
         public float timeRemainingThisFrame;
         public int width;
         public int height;
+        public float originX;
+        public float originY;
+
+        public Rectangle sourceRectangle;
+        public Rectangle destinationRectangle;
 
         public AnimatedSprite(Texture2D texture, int rows, int columns, float frameRate)
         {
@@ -28,6 +33,7 @@ namespace The_RPG_Prototype
 
         public void Update()
         {
+            timeRemainingThisFrame -= Game1.deltaTime;
             if (timeRemainingThisFrame <= 0f)
             {
                 
@@ -47,12 +53,11 @@ namespace The_RPG_Prototype
             int row = (int)((float)currentFrame / (float)Columns);
             int column = currentFrame % Columns;
 
-            Rectangle sourceRectangle = new Rectangle(width * column, height * row, width, height);
-            Rectangle destinationRectangle;
+            sourceRectangle = new Rectangle(width * column, height * row, width, height);
             destinationRectangle = new Rectangle((int)location.X, (int)location.Y, width, height);
 
-            float originX = (float)width / 2f;
-            float originY = (float)height / 2f;
+            originX = (float)width / 2f;
+            originY = (float)height / 2f;
 
             if (!flipX)
             {

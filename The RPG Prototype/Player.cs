@@ -10,9 +10,12 @@ namespace The_RPG_Prototype
         public Transform transform;
         public Rigidbody rigidbody;
 
-        float maxSpeed;
         AnimatedSprite idleAnim;
         AnimatedSprite runningAnim;
+        AnimatedSprite crouchAnim;
+        AnimatedSprite jumpAnim;
+        AnimatedSprite fallAnim;
+        AnimatedSprite crouchMoveAnim;
         
         Keys myLeftKey;
         Keys myRightKey;
@@ -23,9 +26,13 @@ namespace The_RPG_Prototype
         private bool isMovingLeft;
         private bool isFacingRight;
         private bool isIdle;
+        private bool isCrouching;
+        private bool isJumping;
+        private bool isFalling;
         private float movementMaxForce;
         private float movementForce;
         private float movementMultiplier;
+        float maxSpeed;
         private float jumpSpeed;
 
         private float resistance;
@@ -37,7 +44,8 @@ namespace The_RPG_Prototype
 
         public Player(float playerXPosition, float playerYPosition, Keys leftKey, Keys rightKey, Keys downKey, Keys jumpKey)
         {
-            rigidbody = new Rigidbody(60f, 0f);
+            rigidbody = new Rigidbody(60f, 1f);
+            
             if (rigidbody == null)
             {
                 transform = new Transform();
@@ -47,7 +55,7 @@ namespace The_RPG_Prototype
             }
 
             transform.position = new Vector2(playerXPosition, playerYPosition);
-            maxSpeed = 250f;
+            maxSpeed = 160f;
 
             myLeftKey = leftKey;
             myRightKey = rightKey;
@@ -58,32 +66,38 @@ namespace The_RPG_Prototype
             isMovingLeft = false;
             isFacingRight = true;
             isIdle = true;
+            isCrouching = false;
+            isJumping = false;
+            isFalling = false;
 
             movementMultiplier = 0f;
-            jumpSpeed = 10f;
+            jumpSpeed = 180f;
 
             density = 1f;
             dragCoefficient = .8f;
             area = .5f;
         }
 
-        public void LoadContent(Texture2D idleTexture, Texture2D runningTexture)
+        public void LoadContent(Texture2D idleTexture, Texture2D runningTexture, Texture2D crouchTexture, Texture2D jumpTexture, Texture2D fallTexture)
         {
-            idleAnim = new AnimatedSprite(idleTexture, 1, 4, 6f);
-            runningAnim = new AnimatedSprite(runningTexture, 1, 8, 12f);
+            idleAnim = new AnimatedSprite(idleTexture, 1, 3, 4f);
+            runningAnim = new AnimatedSprite(runningTexture, 1, 6, 9f);
+            crouchAnim = new AnimatedSprite(crouchTexture, 1, 4, 4f);
+            jumpAnim = new AnimatedSprite(jumpTexture, 1, 1, 1f);
+            fallAnim = new AnimatedSprite(fallTexture, 1, 2, 8f);
         }
 
-        public void Update(GameTime gameTime, KeyboardState myKeyboardState)
+        public void Update(GameTime gameTime, KeyboardState myKeyboardState, KeyboardState myPreviousKeyboardState)
         {
-            
+            isGrounded = rigidbody.isGrounded;
 
-            if (myKeyboardState.IsKeyDown(myLeftKey))
+            if (myKeyboardState.IsKeyDown(myLeftKey) && !isCrouching)
             {
                 isMovingLeft = true;
                 isFacingRight = false;
                 movementMultiplier = -1f;
             } else { isMovingLeft = false; }
-            if (myKeyboardState.IsKeyDown(myRightKey))
+            if (myKeyboardState.IsKeyDown(myRightKey) && !isCrouching)
             {
                 isMovingRight = true;
                 isFacingRight = true;
@@ -91,15 +105,27 @@ namespace The_RPG_Prototype
                 
             } else { isMovingRight = false; }
 
+            if (myKeyboardState.IsKeyDown(myDownKey) && isGrounded)
+            {
+                isCrouching = true;
+            } else
+            {
+                isCrouching = false;
+            }
+
+            if (myKeyboardState.IsKeyDown(myJumpKey) && myPreviousKeyboardState.IsKeyUp(myJumpKey) && isGrounded)
+            {
+                isJumping = true;
+                rigidbody.AddForce(new Vector2(0f, -jumpSpeed), Rigidbody.ForceMode.Impulse);
+            }
+
             if (isMovingRight || isMovingLeft)
             {
                 runningAnim.Update();
-                runningAnim.timeRemainingThisFrame -= Game1.deltaTime;
             }
 
-            if (!isMovingRight && !isMovingLeft)
+            if (!isMovingRight && !isMovingLeft && !isCrouching)
             {
-                movementMultiplier = 0f;
                 isIdle = true;
             } else
             {
@@ -108,29 +134,34 @@ namespace The_RPG_Prototype
 
             if (isIdle)
             {
+                movementMultiplier = 0f;
                 idleAnim.Update();
-                idleAnim.timeRemainingThisFrame -= Game1.deltaTime;
+            }
+            if (isCrouching)
+            {
+                movementMultiplier = 0f;
+                crouchAnim.Update();
             }
 
             // air resistance calculation - might be wrong
             resistance = (density * dragCoefficient * area) / 2f * (float)Math.Pow(rigidbody.velocity.X, 2);
             
-            rigidbody.velocity = new Vector2(maxSpeed * movementMultiplier, rigidbody.velocity.Y);
-
+            rigidbody.velocity.X = maxSpeed * movementMultiplier;
+            
             rigidbody.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (isMovingRight)
+            if (isMovingRight && isGrounded)
             {
                 runningAnim.Draw(spriteBatch, transform.position);
             }
-            else if (isMovingLeft)
+            else if (isMovingLeft && isGrounded)
             {
                 runningAnim.Draw(spriteBatch, transform.position, true);
             }
-            else if (isIdle)
+            else if (isIdle && isGrounded)
             {
                 if (isFacingRight)
                 {
@@ -140,6 +171,43 @@ namespace The_RPG_Prototype
                     idleAnim.Draw(spriteBatch, transform.position, true);
                 }
             }
+            else if (isCrouching)
+            {
+                if (isFacingRight)
+                {
+                    crouchAnim.Draw(spriteBatch, transform.position);
+                }
+                else
+                {
+                    crouchAnim.Draw(spriteBatch, transform.position, true);
+                }
+            }
+            else if (!isGrounded)
+            {
+                if (rigidbody.velocity.Y < 20f)
+                {
+                    if (isFacingRight)
+                    {
+                        jumpAnim.Draw(spriteBatch, transform.position);
+                    }
+                    else
+                    {
+                        jumpAnim.Draw(spriteBatch, transform.position, true);
+                    }
+                }
+                else
+                {
+                    if (isFacingRight)
+                    {
+                        fallAnim.Draw(spriteBatch, transform.position);
+                    }
+                    else
+                    {
+                        fallAnim.Draw(spriteBatch, transform.position, true);
+                    }
+                }
+            }
+
         }
     }
 }

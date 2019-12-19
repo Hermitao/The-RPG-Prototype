@@ -17,9 +17,10 @@ namespace The_RPG_Prototype
         Player player;
         Tileset tileset;
         Texture2D tilesetTexture;
+        public static Texture2D pixel;
 
         public const float gravityX = 0f;
-        public const float gravityY = 9.8f;
+        public const float gravityY = 360f;
 
         public static float deltaTime;
 
@@ -31,7 +32,7 @@ namespace The_RPG_Prototype
         public static KeyboardState keyboardState;
         public static KeyboardState previousKeyboardState;
 
-        public bool debugOverlay;
+        public static bool debugOverlay;
 
         public static int initialResolutionX;
         public static int initialResolutionY;
@@ -96,12 +97,18 @@ namespace The_RPG_Prototype
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            Texture2D idleTexture = Content.Load<Texture2D>("Nioda_Idle");
-            Texture2D runningTexture = Content.Load<Texture2D>("Nioda_Running");
+            Texture2D idleTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_Idle_50x37");
+            Texture2D runningTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_Run_50x37");
+            Texture2D jumpTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_Jump_50x37");
+            Texture2D fallTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_Fall_50x37");
+            Texture2D crouchTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_Crouch_50x37");
+
+
             Square = Content.Load<SpriteFont>("Square");
-            player.LoadContent(idleTexture, runningTexture);
+            player.LoadContent(idleTexture, runningTexture, crouchTexture, jumpTexture, fallTexture);
             tilesetTexture = Content.Load<Texture2D>("Tilesets/Spritesheet");
             tileset = new Tileset(tilesetTexture, 1, 2, 32);
+            pixel = Content.Load<Texture2D>("white pixel");
         }
 
         /// <summary>
@@ -147,21 +154,19 @@ namespace The_RPG_Prototype
 
             if (keyboardState.IsKeyDown(Keys.OemPlus))
             {
-                if (cam.Zoom < 2f)
+                if (cam.Zoom < 4f)
                 {
-                    cam.Zoom = 2f;
+                    cam.Zoom = 4f;
                 }
             } else if (keyboardState.IsKeyDown(Keys.OemMinus))
             {
-                if (cam.Zoom > 1f)
+                if (cam.Zoom > 2f)
                 {
-                    cam.Zoom = 1f;
+                    cam.Zoom = 2f;
                 }
             }
 
             // TODO: Add your update logic here
-            player.Update(gameTime, keyboardState);
-
             mouseState = Mouse.GetState();
             mouseScreenPos = new Vector2( mouseState.Position.X, mouseState.Position.Y);
             mouseWorldPos = mouseScreenPos + (player.transform.position - new Vector2(graphics.PreferredBackBufferWidth/2f, graphics.PreferredBackBufferHeight/2f));
@@ -170,7 +175,9 @@ namespace The_RPG_Prototype
             //normalizedCamTarget.Normalize();
             cam.Move((normalizedCamTarget), .09f);
 
+            player.Update(gameTime, keyboardState, previousKeyboardState);
             previousKeyboardState = keyboardState;
+            
             base.Update(gameTime);
         }
 
@@ -220,6 +227,8 @@ namespace The_RPG_Prototype
             spriteBatch.DrawString(Square, "Mouse Y:" + mouseWorldPos.Y, new Vector2(10f, 270f), Color.LightGray);
             spriteBatch.DrawString(Square, "X: " + player.transform.position.X, new Vector2(10f, 300f), Color.LightGray);
             spriteBatch.DrawString(Square, "Y: " + player.transform.position.Y, new Vector2(10f, 330f), Color.LightGray);
+
+            spriteBatch.DrawString(Square, "Is Grounded: " + player.rigidbody.isGrounded, new Vector2(10f, 390f), Color.LightGray);
             spriteBatch.End();
         }
     }
