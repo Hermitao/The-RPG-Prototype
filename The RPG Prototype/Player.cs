@@ -42,7 +42,8 @@ namespace The_RPG_Prototype
         private float movementMaxForce;
         private float movementForce;
         private float movementMultiplier;
-        float maxSpeed;
+        private float maxSpeed;
+        private float initialMaxSpeed;
         private float jumpSpeed;
 
         private float resistance;
@@ -66,6 +67,7 @@ namespace The_RPG_Prototype
 
             transform.position = new Vector2(playerXPosition, playerYPosition);
             maxSpeed = 160f;
+            initialMaxSpeed = maxSpeed;
 
             myLeftKey = leftKey;
             myRightKey = rightKey;
@@ -83,7 +85,7 @@ namespace The_RPG_Prototype
             previousIsChargingJump = isChargingJump;
 
             movementMultiplier = 0f;
-            jumpSpeed = 180f;
+            jumpSpeed = 220f;
             maxJumpTimer = .15f;
             jumpTimer = 0f;
 
@@ -94,12 +96,12 @@ namespace The_RPG_Prototype
 
         public void LoadContent(Texture2D idleTexture, Texture2D runningTexture, Texture2D crouchTexture, Texture2D jumpTexture, Texture2D jumpChargeTexture, Texture2D fallTexture)
         {
-            idleAnim = new AnimatedSprite(idleTexture, 1, 3, 4f);
+            idleAnim = new AnimatedSprite(idleTexture, 1, 4, 4f);
             runningAnim = new AnimatedSprite(runningTexture, 1, 6, 9f);
             crouchAnim = new AnimatedSprite(crouchTexture, 1, 4, 4f);
             jumpAnim = new AnimatedSprite(jumpTexture, 1, 1, 1f);
             jumpChargeAnim = new AnimatedSprite(jumpChargeTexture, 1, 2, 12f);
-            fallAnim = new AnimatedSprite(fallTexture, 1, 2, 12f);
+            fallAnim = new AnimatedSprite(fallTexture, 1, 1, 1f);
         }
 
         public void Update(GameTime gameTime, KeyboardState myKeyboardState, KeyboardState myPreviousKeyboardState)
@@ -141,11 +143,12 @@ namespace The_RPG_Prototype
             if (isChargingJump)
             {
                 jumpTimer += Game1.deltaTime;
+                maxSpeed = initialMaxSpeed / 1.55f;
 
                 if (myKeyboardState.IsKeyUp(myJumpKey))
                 {
                     isJumping = true;
-                    rigidbody.AddForce((new Vector2(0f, -jumpSpeed) * jumpTimer * 10f) + new Vector2(0, -30f), Rigidbody.ForceMode.Impulse);
+                    rigidbody.AddForce((new Vector2(0f, -jumpSpeed) * jumpTimer * 10f) + new Vector2(0, -50f), Rigidbody.ForceMode.Impulse);
 
                     isChargingJump = false;
                     jumpTimer = 0f;
@@ -154,11 +157,15 @@ namespace The_RPG_Prototype
                 if (jumpTimer >= maxJumpTimer && isGrounded)
                 {
                     isJumping = true;
-                    rigidbody.AddForce((new Vector2(0f, -jumpSpeed) * maxJumpTimer * 10f) + new Vector2(0, -30f), Rigidbody.ForceMode.Impulse);
+                    rigidbody.AddForce((new Vector2(0f, -jumpSpeed) * maxJumpTimer * 10f) + new Vector2(0, -50f), Rigidbody.ForceMode.Impulse);
 
                     isChargingJump = false;
                     jumpTimer = 0f;
                 }
+            }
+            else
+            {
+                maxSpeed = initialMaxSpeed;
             }
 
             if (!isGrounded)
@@ -174,7 +181,8 @@ namespace The_RPG_Prototype
             if (!isMovingRight && !isMovingLeft && !isCrouching)
             {
                 isIdle = true;
-            } else
+            }
+            else
             {
                 isIdle = false;
             }

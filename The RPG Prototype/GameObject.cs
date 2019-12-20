@@ -8,6 +8,20 @@ namespace The_RPG_Prototype
 {
     class GameObject
     {
+        public Actor playerActor;
 
+        public enum objectToInstantiate
+        {
+            Actor,
+            Player
+        }
+
+        public GameObject(objectToInstantiate objToInst)
+        {
+            if (objToInst == objectToInstantiate.Player)
+            {
+                playerActor = new Actor();
+            }
+        }
     }
 }

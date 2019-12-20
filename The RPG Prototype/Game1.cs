@@ -9,7 +9,7 @@ namespace The_RPG_Prototype
     /// </summary>
     public class Game1 : Game
     {
-        public static string GameVersion = "Indev 0.0.1a";
+        public static string GameVersion = "Indev 0.0.2a";
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -17,13 +17,14 @@ namespace The_RPG_Prototype
         bool shouldBeFullScreen;
 
         Actor playerActor;
+        GameObject playerGameObject;
         Player player;
         Tileset tileset;
         Texture2D tilesetTexture;
         public static Texture2D pixel;
 
         public const float gravityX = 0f;
-        public const float gravityY = 360f;
+        public const float gravityY = 600f;
 
         public static float deltaTime;
 
@@ -59,7 +60,7 @@ namespace The_RPG_Prototype
             Content.RootDirectory = "Content";
             shouldBeFullScreen = true;
             debugOverlay = true;
-            blockSize = 32;
+            blockSize = 16;
         }
 
         /// <summary>
@@ -73,7 +74,7 @@ namespace The_RPG_Prototype
             // TODO: Add your initialization logic here
             initialResolutionX = graphics.PreferredBackBufferWidth;
             initialResolutionY = graphics.PreferredBackBufferHeight;
-
+            
             this.IsMouseVisible = true;
             if (shouldBeFullScreen)
             {
@@ -83,7 +84,8 @@ namespace The_RPG_Prototype
                 graphics.ApplyChanges();
             }
 
-            playerActor = new Actor();
+            playerGameObject = new GameObject(GameObject.objectToInstantiate.Player);
+            playerActor = playerGameObject.playerActor;
             player = playerActor.player;
 
             cam = new Camera2D
@@ -105,17 +107,17 @@ namespace The_RPG_Prototype
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            Texture2D idleTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_Idle_50x37");
-            Texture2D runningTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_Run_50x37");
-            Texture2D crouchTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_Crouch_50x37");
-            Texture2D jumpTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_Jump_50x37");
-            Texture2D jumpChargeTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_JumpCharge_50x37");
-            Texture2D fallTexture = Content.Load<Texture2D>("Spritesheets/Adventurer_Fall_50x37");
+            Texture2D idleTexture = Content.Load<Texture2D>("Spritesheets/Human_Idle_50x36");
+            Texture2D runningTexture = Content.Load<Texture2D>("Spritesheets/Human_Running_50x36");
+            Texture2D crouchTexture = Content.Load<Texture2D>("Spritesheets/Human_Crouching_50x36");
+            Texture2D jumpTexture = Content.Load<Texture2D>("Spritesheets/Human_Jumping_50x36");
+            Texture2D jumpChargeTexture = Content.Load<Texture2D>("Spritesheets/Human_JumpCharge_50x36");
+            Texture2D fallTexture = Content.Load<Texture2D>("Spritesheets/Human_Falling_50x36");
             
             Square = Content.Load<SpriteFont>("Square");
             player.LoadContent(idleTexture, runningTexture, crouchTexture, jumpTexture, jumpChargeTexture, fallTexture);
-            tilesetTexture = Content.Load<Texture2D>("Tilesets/Spritesheet");
-            tileset = new Tileset(tilesetTexture, 1, 2, 32);
+            tilesetTexture = Content.Load<Texture2D>("Tilesets/Tileset_16x16");
+            tileset = new Tileset(tilesetTexture, 1, 2, 16);
             pixel = Content.Load<Texture2D>("white pixel");
         }
 
@@ -241,13 +243,13 @@ namespace The_RPG_Prototype
             n+=2;
             spriteBatch.DrawString(Square, "Blocks" , new Vector2(10f, titlePosY + spacing*n), Color.LightGray);
             n++;
-            spriteBatch.DrawString(Square, "Mouse X (" + mouseWorldPos.X / blockSize + ")", new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            spriteBatch.DrawString(Square, "Mouse X (" + mouseWorldPos.X / (blockSize) + ")", new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
             n++;
-            spriteBatch.DrawString(Square, "Mouse Y (" + mouseWorldPos.Y / blockSize + ")", new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            spriteBatch.DrawString(Square, "Mouse Y (" + mouseWorldPos.Y / (blockSize) + ")", new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
             n++;
-            spriteBatch.DrawString(Square, "X (" + player.transform.position.X / blockSize + ")", new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            spriteBatch.DrawString(Square, "X (" + player.transform.position.X / (blockSize) + ")", new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
             n++;
-            spriteBatch.DrawString(Square, "Y (" + player.transform.position.Y / blockSize + ")", new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            spriteBatch.DrawString(Square, "Y (" + player.transform.position.Y / (blockSize) + ")", new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
             n += 2f;
 
             spriteBatch.DrawString(Square, "Units", new Vector2(10f, titlePosY + spacing * n), Color.LightGray);

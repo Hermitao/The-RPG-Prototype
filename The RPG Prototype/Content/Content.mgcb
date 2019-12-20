@@ -19,7 +19,7 @@
 /processorParam:Quality=Best
 /build:Audio/SFX/FootstepGrass_1.wav
 
-#begin Spritesheets/Adventurer_Crouch_50x37.png
+#begin Spritesheets/Human_Crouching_50x36.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -29,9 +29,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Spritesheets/Adventurer_Crouch_50x37.png
+/build:Spritesheets/Human_Crouching_50x36.png
 
-#begin Spritesheets/Adventurer_Fall_50x37.png
+#begin Spritesheets/Human_Falling_50x36.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -41,9 +41,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Spritesheets/Adventurer_Fall_50x37.png
+/build:Spritesheets/Human_Falling_50x36.png
 
-#begin Spritesheets/Adventurer_Idle_50x37.png
+#begin Spritesheets/Human_Idle_50x36.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -53,9 +53,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Spritesheets/Adventurer_Idle_50x37.png
+/build:Spritesheets/Human_Idle_50x36.png
 
-#begin Spritesheets/Adventurer_Jump_50x37.png
+#begin Spritesheets/Human_JumpCharge_50x36.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -65,9 +65,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Spritesheets/Adventurer_Jump_50x37.png
+/build:Spritesheets/Human_JumpCharge_50x36.png
 
-#begin Spritesheets/Adventurer_JumpCharge_50x37.png
+#begin Spritesheets/Human_Jumping_50x36.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -77,9 +77,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Spritesheets/Adventurer_JumpCharge_50x37.png
+/build:Spritesheets/Human_Jumping_50x36.png
 
-#begin Spritesheets/Adventurer_Run_50x37.png
+#begin Spritesheets/Human_Running_50x36.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -89,7 +89,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Spritesheets/Adventurer_Run_50x37.png
+/build:Spritesheets/Human_Running_50x36.png
 
 #begin Square.spritefont
 /importer:FontDescriptionImporter
@@ -116,6 +116,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Tilesets/Spritesheet.png
+
+#begin Tilesets/Tileset_16x16.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Tilesets/Tileset_16x16.png
 
 #begin white pixel.png
 /importer:TextureImporter
