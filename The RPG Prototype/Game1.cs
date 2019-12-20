@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace The_RPG_Prototype
 {
@@ -15,6 +16,8 @@ namespace The_RPG_Prototype
         SpriteBatch spriteBatch;
         SpriteFont Square;
         bool shouldBeFullScreen;
+
+        List<GameObject> AllGameObjects = new List<GameObject>();
 
         Actor playerActor;
         GameObject playerGameObject;
@@ -84,8 +87,9 @@ namespace The_RPG_Prototype
                 graphics.ApplyChanges();
             }
 
-            playerGameObject = new GameObject(GameObject.objectToInstantiate.Player);
-            playerActor = playerGameObject.playerActor;
+            playerGameObject = new GameObject(GameObject.objectToInstantiate.Player, new Vector2(0f, 0f));
+            AllGameObjects.Add(playerGameObject);
+            playerActor = playerGameObject.actor;
             player = playerActor.player;
 
             cam = new Camera2D
@@ -185,10 +189,14 @@ namespace The_RPG_Prototype
             //normalizedCamTarget.Normalize();
             cam.Move((normalizedCamTarget), .09f);
 
-            player.Update(gameTime, keyboardState, previousKeyboardState);
+            foreach (GameObject gameObject in AllGameObjects) // update all game objects
+            {
+                gameObject.Update(gameTime);
+            }
+
             previousKeyboardState = keyboardState;
 
-            frameElapsedTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            frameElapsedTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds; // for the fps counter
 
             if (frameElapsedTime >= 1000f)
             {
@@ -217,8 +225,11 @@ namespace The_RPG_Prototype
                         null,
                         null,
                         cam.get_transformation(GraphicsDevice /*Send the variable that has your graphic device here*/));
-            player.Draw(spriteBatch);
-            tileset.Draw(spriteBatch, new Vector2(0, 17));
+            foreach (GameObject gameObject in AllGameObjects)
+            {
+                gameObject.Draw(spriteBatch);
+            }
+            tileset.Draw(spriteBatch, new Vector2(0, 18));
             spriteBatch.End();
 
             spriteBatch.Begin();

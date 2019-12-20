@@ -1,27 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace The_RPG_Prototype
 {
     class GameObject
     {
-        public Actor playerActor;
+        public Actor actor;
 
         public enum objectToInstantiate
         {
-            Actor,
+            Enemy,
             Player
         }
 
-        public GameObject(objectToInstantiate objToInst)
+        public GameObject(objectToInstantiate objToInst, Vector2 position)
         {
             if (objToInst == objectToInstantiate.Player)
             {
-                playerActor = new Actor();
+                actor = new Actor(Actor.TypesOfActor.Player, position);
             }
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            actor.Update(gameTime);
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            actor.Draw(spriteBatch);
         }
     }
 }

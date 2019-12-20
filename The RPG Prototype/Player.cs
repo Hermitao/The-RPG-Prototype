@@ -100,7 +100,7 @@ namespace The_RPG_Prototype
             runningAnim = new AnimatedSprite(runningTexture, 1, 6, 9f);
             crouchAnim = new AnimatedSprite(crouchTexture, 1, 4, 4f);
             jumpAnim = new AnimatedSprite(jumpTexture, 1, 1, 1f);
-            jumpChargeAnim = new AnimatedSprite(jumpChargeTexture, 1, 2, 12f);
+            jumpChargeAnim = new AnimatedSprite(jumpChargeTexture, 1, 2, 9f);
             fallAnim = new AnimatedSprite(fallTexture, 1, 1, 1f);
         }
 
