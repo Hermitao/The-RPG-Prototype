@@ -21,6 +21,11 @@ namespace The_RPG_Prototype
             }
         }
 
+        public void InitializeObject()
+        {
+
+        }
+
         public void Update(GameTime gameTime)
         {
             player.Update(gameTime, Game1.keyboardState, Game1.previousKeyboardState);

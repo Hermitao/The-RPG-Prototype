@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
+using System.Diagnostics;
 
 namespace The_RPG_Prototype
 {
@@ -10,6 +11,7 @@ namespace The_RPG_Prototype
     {
         public Transform transform;
         public Rigidbody rigidbody;
+        public BoxCollider boxCollider;
 
         AnimatedSprite idleAnim;
         AnimatedSprite runningAnim;
@@ -18,6 +20,8 @@ namespace The_RPG_Prototype
         AnimatedSprite jumpChargeAnim;
         AnimatedSprite fallAnim;
         AnimatedSprite crouchMoveAnim;
+        AnimatedSprite frontUpperArmAnim;
+        AnimatedSprite frontLowerArmAnim;
 
         SoundEffect footstep;
         
@@ -66,7 +70,7 @@ namespace The_RPG_Prototype
             }
 
             transform.position = new Vector2(playerXPosition, playerYPosition);
-            maxSpeed = 160f;
+            maxSpeed = 130f;
             initialMaxSpeed = maxSpeed;
 
             myLeftKey = leftKey;
@@ -92,6 +96,12 @@ namespace The_RPG_Prototype
             density = 1f;
             dragCoefficient = .8f;
             area = .5f;
+
+            boxCollider = new BoxCollider(
+                Vector2.Zero,
+                new Vector2(50f, 36f)
+                );
+            BoxCollider.AllBoxColliders.Add(boxCollider);
         }
 
         public void LoadContent(Texture2D idleTexture, Texture2D runningTexture, Texture2D crouchTexture, Texture2D jumpTexture, Texture2D jumpChargeTexture, Texture2D fallTexture)
@@ -104,8 +114,30 @@ namespace The_RPG_Prototype
             fallAnim = new AnimatedSprite(fallTexture, 1, 1, 1f);
         }
 
+        public void InitializeObject()
+        {
+
+        }
+
         public void Update(GameTime gameTime, KeyboardState myKeyboardState, KeyboardState myPreviousKeyboardState)
         {
+            boxCollider.Update(transform.position);
+
+            Game1.valueA = boxCollider.y;
+            Game1.valueB = boxCollider.y + boxCollider.height;
+
+            bool isColliding = boxCollider.OnCollisionStay();
+
+            if (isColliding == true)
+            {
+                Game1.tempIsColliding = true;
+                rigidbody.isGrounded = true;
+            } else
+            {
+                Game1.tempIsColliding = false;
+                rigidbody.isGrounded = false;
+            }
+
             isGrounded = rigidbody.isGrounded;
 
             if (myKeyboardState.IsKeyDown(myLeftKey) && !isCrouching)
@@ -129,12 +161,6 @@ namespace The_RPG_Prototype
             {
                 isCrouching = false;
             }
-
-            //if (myKeyboardState.IsKeyDown(myJumpKey) && myPreviousKeyboardState.IsKeyUp(myJumpKey) && isGrounded)
-            //{
-            //    isJumping = true;
-            //    rigidbody.AddForce(new Vector2(0f, -jumpSpeed), Rigidbody.ForceMode.Impulse);
-            //}
 
             if (myKeyboardState.IsKeyDown(myJumpKey) && myPreviousKeyboardState.IsKeyUp(myJumpKey) && isGrounded)
             {
@@ -206,7 +232,7 @@ namespace The_RPG_Prototype
 
             // air resistance calculation - might be wrong
             resistance = (density * dragCoefficient * area) / 2f * (float)Math.Pow(rigidbody.velocity.X, 2);
-            
+
             rigidbody.velocity.X = maxSpeed * movementMultiplier;
             rigidbody.Update(gameTime);
         }
@@ -280,7 +306,6 @@ namespace The_RPG_Prototype
                     }
                 }
             }
-
         }
     }
 }

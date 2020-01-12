@@ -16,11 +16,14 @@ namespace The_RPG_Prototype
         public int height;
         public float originX;
         public float originY;
+        public bool _overrideOrigin;
+        public float myRotation;
+        public Vector2 overriddenOrigin;
 
         public Rectangle sourceRectangle;
         public Rectangle destinationRectangle;
 
-        public AnimatedSprite(Texture2D texture, int rows, int columns, float frameRate)
+        public AnimatedSprite(Texture2D texture, int rows, int columns, float frameRate, bool overrideOrigin = false, float originOverrideX = 0f, float originOverrideY = 0f, float rotation = 0f)
         {
             Texture = texture;
             Rows = rows;
@@ -29,6 +32,14 @@ namespace The_RPG_Prototype
             totalFrames = Rows * Columns;
             animationFrameTime = 1 / frameRate;
             timeRemainingThisFrame = animationFrameTime;
+            _overrideOrigin = overrideOrigin;
+            originX = originOverrideX;
+            originY = originOverrideY;
+            overriddenOrigin = new Vector2(originX, originY);
+            myRotation = rotation;
+
+            width = Texture.Width / Columns;
+            height = Texture.Height / Rows;
         }
 
         public void Update()
@@ -48,23 +59,29 @@ namespace The_RPG_Prototype
 
         public void Draw(SpriteBatch spriteBatch, Vector2 location, bool flipX = false)
         {
-            width = Texture.Width / Columns;
-            height = Texture.Height / Rows;
             int row = (int)((float)currentFrame / (float)Columns);
             int column = currentFrame % Columns;
 
             sourceRectangle = new Rectangle(width * column, height * row, width, height);
             destinationRectangle = new Rectangle((int)location.X, (int)location.Y, width, height);
 
-            originX = (float)width / 2f;
-            originY = (float)height / 2f;
+            if (!_overrideOrigin)
+            {
+                originX = (float)width / 2f;
+                originY = (float)height / 2f;
+            }
+            originX = 0f;
+            originY = 0f;
 
             if (!flipX)
             {
-                spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White, 0f, new Vector2(originX, originY), SpriteEffects.None, 0f);
+                //spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White, myRotation, new Vector2(originX, originY), SpriteEffects.None, 0f);
+                spriteBatch.Draw(Texture, location, sourceRectangle, Color.White, myRotation, new Vector2(originX, originY), 1f, SpriteEffects.None, 0f);
+                //spriteBatch.Draw(Texture, null, sourceRectangle, Color.White, myRotation, new Vector2(originX, originY), SpriteEffects.None, 0f);
             } else
             {
-                spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White, 0f, new Vector2(originX, originY), SpriteEffects.FlipHorizontally, 0f);
+                //spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White, myRotation, new Vector2(originX, originY), SpriteEffects.FlipHorizontally, 0f);
+                spriteBatch.Draw(Texture, location, sourceRectangle, Color.White, myRotation, new Vector2(originX, originY), 1f, SpriteEffects.FlipHorizontally, 0f);
             }
         }
     }

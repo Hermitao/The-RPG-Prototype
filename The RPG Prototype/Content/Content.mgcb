@@ -19,6 +19,30 @@
 /processorParam:Quality=Best
 /build:Audio/SFX/FootstepGrass_1.wav
 
+#begin Spritesheets/Human_Back_LowerArm_16x16.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Spritesheets/Human_Back_LowerArm_16x16.png
+
+#begin Spritesheets/Human_Back_UpperArm_16x16.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Spritesheets/Human_Back_UpperArm_16x16.png
+
 #begin Spritesheets/Human_Crouching_50x36.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -42,6 +66,54 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Spritesheets/Human_Falling_50x36.png
+
+#begin Spritesheets/Human_Front_LowerArm_16x16.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Spritesheets/Human_Front_LowerArm_16x16.png
+
+#begin Spritesheets/Human_Front_LowerArm_16x16_temp.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Spritesheets/Human_Front_LowerArm_16x16_temp.png
+
+#begin Spritesheets/Human_Front_UpperArm_16x16.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Spritesheets/Human_Front_UpperArm_16x16.png
+
+#begin Spritesheets/Human_Front_UpperArm_16x16_temp.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Spritesheets/Human_Front_UpperArm_16x16_temp.png
 
 #begin Spritesheets/Human_Idle_50x36.png
 /importer:TextureImporter
@@ -104,6 +176,18 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:Squareo.spritefont
+
+#begin Tilesets/GreyRock.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Tilesets/GreyRock.png
 
 #begin Tilesets/Spritesheet.png
 /importer:TextureImporter

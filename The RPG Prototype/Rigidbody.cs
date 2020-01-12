@@ -48,7 +48,7 @@ namespace The_RPG_Prototype
 
             transform.position += velocity * Game1.deltaTime;
 
-            if (transform.position.Y >= 0f && !previousIsGrounded)
+            /*if (transform.position.Y >= 0f && !previousIsGrounded)
             {
                 transform.position.Y = 0f;
                 velocity = new Vector2(velocity.X, 0f);
@@ -56,7 +56,7 @@ namespace The_RPG_Prototype
             } else if (transform.position.Y < 0f)
             {
                 isGrounded = false;
-            }
+            }*/
 
             previousIsGrounded = isGrounded;
         }

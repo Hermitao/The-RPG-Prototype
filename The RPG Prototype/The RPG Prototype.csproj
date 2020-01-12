@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Actor.cs" />
     <Compile Include="AnimatedSprite.cs" />
+    <Compile Include="BoxCollider.cs" />
     <Compile Include="Camera2D.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="Rigidbody.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tile.cs" />
     <Compile Include="Tileset.cs" />
     <Compile Include="Transform.cs" />
   </ItemGroup>

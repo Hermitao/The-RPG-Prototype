@@ -7,29 +7,68 @@ namespace The_RPG_Prototype
     class GameObject
     {
         public Actor actor;
+        public Tile tile;
 
-        public enum objectToInstantiate
+        public enum actorToInstantiate
         {
-            Enemy,
             Player
         }
 
-        public GameObject(objectToInstantiate objToInst, Vector2 position)
+        public enum objectToInstantiate
         {
-            if (objToInst == objectToInstantiate.Player)
+            Tile
+        }
+
+        public GameObject(actorToInstantiate actorToInst, Vector2 position)
+        {
+            if (actorToInst == actorToInstantiate.Player)
             {
                 actor = new Actor(Actor.TypesOfActor.Player, position);
             }
         }
 
+        public GameObject (objectToInstantiate objToInst, Vector2 position)
+        {
+            if (objToInst == objectToInstantiate.Tile)
+            {
+                tile = new Tile(position);
+            }
+        }
+
         public void Update(GameTime gameTime)
         {
-            actor.Update(gameTime);
+            if (actor != null)
+            {
+                actor.Update(gameTime);
+            }
+            else if (tile != null)
+            {
+                tile.Update();
+            }
+        }
+
+        public void InitializeObject()
+        {
+            if (actor != null)
+            {
+                actor.InitializeObject();
+            }
+            else if (tile != null)
+            {
+                tile.InitializeObject();
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            actor.Draw(spriteBatch);
+            if (actor != null)
+            {
+                actor.Draw(spriteBatch);
+            }
+            else if (tile != null)
+            {
+                tile.Draw(spriteBatch);
+            }
         }
     }
 }

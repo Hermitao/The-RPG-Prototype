@@ -10,7 +10,7 @@ namespace The_RPG_Prototype
     /// </summary>
     public class Game1 : Game
     {
-        public static string GameVersion = "Indev 0.0.2a";
+        public static string GameVersion = "Indev 0.0.2a snapshot 1";
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -23,6 +23,8 @@ namespace The_RPG_Prototype
         GameObject playerGameObject;
         Player player;
         Tileset tileset;
+        GameObject tileGameObj;
+        GameObject tempTileGameObj;
         Texture2D tilesetTexture;
         public static Texture2D pixel;
 
@@ -40,6 +42,9 @@ namespace The_RPG_Prototype
         public static KeyboardState previousKeyboardState;
 
         public static bool debugOverlay;
+        public static bool tempIsColliding;
+        public static float valueA;
+        public static float valueB;
 
         public static int initialResolutionX;
         public static int initialResolutionY;
@@ -87,10 +92,16 @@ namespace The_RPG_Prototype
                 graphics.ApplyChanges();
             }
 
-            playerGameObject = new GameObject(GameObject.objectToInstantiate.Player, new Vector2(0f, 0f));
+            // adding the player
+            playerGameObject = new GameObject(GameObject.actorToInstantiate.Player, new Vector2(0f, 0f));
             AllGameObjects.Add(playerGameObject);
             playerActor = playerGameObject.actor;
             player = playerActor.player;
+
+            tileGameObj = new GameObject(GameObject.objectToInstantiate.Tile, new Vector2(0f, 256f));
+            AllGameObjects.Add(tileGameObj);
+            tempTileGameObj = new GameObject(GameObject.objectToInstantiate.Tile, new Vector2(64f, 192f));
+            AllGameObjects.Add(tempTileGameObj);
 
             cam = new Camera2D
             {
@@ -117,12 +128,24 @@ namespace The_RPG_Prototype
             Texture2D jumpTexture = Content.Load<Texture2D>("Spritesheets/Human_Jumping_50x36");
             Texture2D jumpChargeTexture = Content.Load<Texture2D>("Spritesheets/Human_JumpCharge_50x36");
             Texture2D fallTexture = Content.Load<Texture2D>("Spritesheets/Human_Falling_50x36");
-            
+
+            Texture2D greyRock = Content.Load<Texture2D>("Tilesets/GreyRock");
+
             Square = Content.Load<SpriteFont>("Square");
             player.LoadContent(idleTexture, runningTexture, crouchTexture, jumpTexture, jumpChargeTexture, fallTexture);
+            tileGameObj.tile.LoadContent(greyRock);
+            tempTileGameObj.tile.LoadContent(greyRock);
             tilesetTexture = Content.Load<Texture2D>("Tilesets/Tileset_16x16");
-            tileset = new Tileset(tilesetTexture, 1, 2, 16);
+            //tileset = new Tileset(tilesetTexture, 1, 2, 16);
             pixel = Content.Load<Texture2D>("white pixel");
+        }
+
+        public void InitializeObjects()
+        {
+            foreach (GameObject gameObject in AllGameObjects)
+            {
+                gameObject.InitializeObject();
+            }
         }
 
         /// <summary>
@@ -151,7 +174,7 @@ namespace The_RPG_Prototype
             {
                 debugOverlay = !debugOverlay;
             }
-            if (keyboardState.IsKeyDown(Keys.F11) && previousKeyboardState.IsKeyUp(Keys.F11))
+            if ( keyboardState.IsKeyDown(Keys.F11) && previousKeyboardState.IsKeyUp(Keys.F11) )
             {
                 if (graphics.IsFullScreen)
                 {
@@ -229,7 +252,7 @@ namespace The_RPG_Prototype
             {
                 gameObject.Draw(spriteBatch);
             }
-            tileset.Draw(spriteBatch, new Vector2(0, 18));
+            //tileset.Draw(spriteBatch, new Vector2(0, 18));
             spriteBatch.End();
 
             spriteBatch.Begin();
@@ -275,6 +298,12 @@ namespace The_RPG_Prototype
             n += 2f;
 
             spriteBatch.DrawString(Square, "Is Grounded: " + player.rigidbody.isGrounded, new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            n++;
+            spriteBatch.DrawString(Square, "Is Colliding: " + tempIsColliding, new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            n++;
+            spriteBatch.DrawString(Square, "Value A: " + valueA, new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            n++;
+            spriteBatch.DrawString(Square, "Value B: " + valueB, new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
             n++;
             spriteBatch.End();
         }
