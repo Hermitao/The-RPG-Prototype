@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace The_RPG_Prototype
 {
-    class GameObject
+    public class GameObject
     {
         public Actor actor;
         public Tile tile;
@@ -21,6 +21,8 @@ namespace The_RPG_Prototype
 
         public GameObject(actorToInstantiate actorToInst, Vector2 position)
         {
+            Game1.AllGameObjects.Add(this);
+
             if (actorToInst == actorToInstantiate.Player)
             {
                 actor = new Actor(Actor.TypesOfActor.Player, position);
@@ -29,6 +31,8 @@ namespace The_RPG_Prototype
 
         public GameObject (objectToInstantiate objToInst, Vector2 position)
         {
+            Game1.AllGameObjects.Add(this);
+
             if (objToInst == objectToInstantiate.Tile)
             {
                 tile = new Tile(position);

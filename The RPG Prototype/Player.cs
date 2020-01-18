@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace The_RPG_Prototype
 {
-    class Player
+    public class Player
     {
         public Transform transform;
         public Rigidbody rigidbody;
@@ -20,8 +20,6 @@ namespace The_RPG_Prototype
         AnimatedSprite jumpChargeAnim;
         AnimatedSprite fallAnim;
         AnimatedSprite crouchMoveAnim;
-        AnimatedSprite frontUpperArmAnim;
-        AnimatedSprite frontLowerArmAnim;
 
         SoundEffect footstep;
         
@@ -43,8 +41,6 @@ namespace The_RPG_Prototype
         private float jumpTimer;
         
         private bool isFalling;
-        private float movementMaxForce;
-        private float movementForce;
         private float movementMultiplier;
         private float maxSpeed;
         private float initialMaxSpeed;
@@ -56,6 +52,11 @@ namespace The_RPG_Prototype
         private float area;
 
         public bool isGrounded;
+
+        private Vector2 boxColliderIdleMin;
+        private Vector2 boxColliderIdleMax;
+        private Vector2 boxColliderCrouchMin;
+        private Vector2 boxColliderCrouchMax;
 
         public Player(float playerXPosition, float playerYPosition, Keys leftKey, Keys rightKey, Keys downKey, Keys jumpKey)
         {
@@ -89,7 +90,7 @@ namespace The_RPG_Prototype
             previousIsChargingJump = isChargingJump;
 
             movementMultiplier = 0f;
-            jumpSpeed = 220f;
+            jumpSpeed = 200f;
             maxJumpTimer = .15f;
             jumpTimer = 0f;
 
@@ -97,21 +98,28 @@ namespace The_RPG_Prototype
             dragCoefficient = .8f;
             area = .5f;
 
-            boxCollider = new BoxCollider(
-                Vector2.Zero,
-                new Vector2(50f, 36f)
-                );
-            BoxCollider.AllBoxColliders.Add(boxCollider);
+
+            boxColliderIdleMin = new Vector2(19f, 5f);
+            boxColliderIdleMax = new Vector2(30f, 36.5f);
+
+            boxColliderCrouchMin = new Vector2(19f, 10f);
+            boxColliderCrouchMax = new Vector2(30f, 36.5f);
         }
 
         public void LoadContent(Texture2D idleTexture, Texture2D runningTexture, Texture2D crouchTexture, Texture2D jumpTexture, Texture2D jumpChargeTexture, Texture2D fallTexture)
         {
-            idleAnim = new AnimatedSprite(idleTexture, 1, 4, 4f);
-            runningAnim = new AnimatedSprite(runningTexture, 1, 6, 9f);
-            crouchAnim = new AnimatedSprite(crouchTexture, 1, 4, 4f);
-            jumpAnim = new AnimatedSprite(jumpTexture, 1, 1, 1f);
-            jumpChargeAnim = new AnimatedSprite(jumpChargeTexture, 1, 2, 9f);
-            fallAnim = new AnimatedSprite(fallTexture, 1, 1, 1f);
+            idleAnim = new AnimatedSprite(idleTexture, 1, 4, 4f, true, 0f, 0f);
+            runningAnim = new AnimatedSprite(runningTexture, 1, 6, 9f, true, 0f, 0f);
+            crouchAnim = new AnimatedSprite(crouchTexture, 1, 4, 4f, true, 0f, 0f);
+            jumpAnim = new AnimatedSprite(jumpTexture, 1, 1, 1f, true, 0f, 0f);
+            jumpChargeAnim = new AnimatedSprite(jumpChargeTexture, 1, 2, 9f, true, 0f, 0f);
+            fallAnim = new AnimatedSprite(fallTexture, 1, 1, 1f, true, 0f, 0f);
+
+            boxCollider = new BoxCollider(
+                boxColliderIdleMin,
+                boxColliderIdleMax
+                );
+
         }
 
         public void InitializeObject()
@@ -121,11 +129,6 @@ namespace The_RPG_Prototype
 
         public void Update(GameTime gameTime, KeyboardState myKeyboardState, KeyboardState myPreviousKeyboardState)
         {
-            boxCollider.Update(transform.position);
-
-            Game1.valueA = boxCollider.y;
-            Game1.valueB = boxCollider.y + boxCollider.height;
-
             bool isColliding = boxCollider.OnCollisionStay();
 
             if (isColliding == true)
@@ -215,13 +218,22 @@ namespace The_RPG_Prototype
 
             if (isIdle)
             {
+                
+
                 movementMultiplier = 0f;
                 idleAnim.Update();
             }
             if (isCrouching)
             {
+                boxCollider._min = boxColliderCrouchMin;
+                boxCollider._max = boxColliderCrouchMax;
+
                 movementMultiplier = 0f;
                 crouchAnim.Update();
+            } else
+            {
+                boxCollider._min = boxColliderIdleMin;
+                boxCollider._max = boxColliderIdleMax;
             }
 
             jumpAnim.Update();
@@ -235,6 +247,8 @@ namespace The_RPG_Prototype
 
             rigidbody.velocity.X = maxSpeed * movementMultiplier;
             rigidbody.Update(gameTime);
+
+            boxCollider.Update(transform.position);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -305,6 +319,11 @@ namespace The_RPG_Prototype
                         fallAnim.Draw(spriteBatch, transform.position, true);
                     }
                 }
+            }
+
+            if (Game1.debugShowHitBoxes)
+            {
+                boxCollider.Draw(spriteBatch, Color.Green.R, Color.Green.G, Color.Green.B);
             }
         }
     }

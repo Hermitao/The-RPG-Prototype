@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace The_RPG_Prototype
 {
-    class Actor
+    public class Actor
     {
         public enum TypesOfActor
         {

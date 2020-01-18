@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace The_RPG_Prototype
 {
-    class Transform
+    public class Transform
     {
         public Vector2 position;
 

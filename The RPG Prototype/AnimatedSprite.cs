@@ -70,8 +70,6 @@ namespace The_RPG_Prototype
                 originX = (float)width / 2f;
                 originY = (float)height / 2f;
             }
-            originX = 0f;
-            originY = 0f;
 
             if (!flipX)
             {

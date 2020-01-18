@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace The_RPG_Prototype
 {
-    class Tile
+    public class Tile
     {
         public BoxCollider boxCollider;
 
@@ -23,6 +23,10 @@ namespace The_RPG_Prototype
         public void LoadContent(Texture2D texture)
         {
             _texture = texture;
+            boxCollider = new BoxCollider(
+                Vector2.Zero,
+                new Vector2(_texture.Width, _texture.Height)
+                );
         }
 
         public void InitializeObject()
@@ -32,11 +36,6 @@ namespace The_RPG_Prototype
 
         public void Update()
         {
-            boxCollider = new BoxCollider(
-                Vector2.Zero,
-                new Vector2(_texture.Width, _texture.Height)
-                );
-            BoxCollider.AllBoxColliders.Add(boxCollider);
             boxCollider.Update(_position);
         }
 
@@ -48,6 +47,11 @@ namespace The_RPG_Prototype
             destinationRectangle = new Rectangle((int)_position.X, (int)_position.Y, spriteWidth, spriteHeight);
 
             spriteBatch.Draw(_texture, destinationRectangle, Color.White);
+
+            if (Game1.debugShowHitBoxes)
+            {
+                boxCollider.Draw(spriteBatch, Color.Green.R, Color.Green.G, Color.Green.B);
+            }
         }
     }
 }

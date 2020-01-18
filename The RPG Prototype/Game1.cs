@@ -10,14 +10,14 @@ namespace The_RPG_Prototype
     /// </summary>
     public class Game1 : Game
     {
-        public static string GameVersion = "Indev 0.0.2a snapshot 1";
+        public static string GameVersion = "Indev 0.0.2a snapshot 3";
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteFont Square;
         bool shouldBeFullScreen;
 
-        List<GameObject> AllGameObjects = new List<GameObject>();
+        public static List<GameObject> AllGameObjects = new List<GameObject>();
 
         Actor playerActor;
         GameObject playerGameObject;
@@ -41,10 +41,19 @@ namespace The_RPG_Prototype
         public static KeyboardState keyboardState;
         public static KeyboardState previousKeyboardState;
 
+        // debug overlay ---------------------------
         public static bool debugOverlay;
+        public static bool debugShowHitBoxes;
+
         public static bool tempIsColliding;
+        public static bool collidingDown;
+        public static bool collidingUp;
+        public static bool collidingRight;
+        public static bool collidingLeft;
+        
         public static float valueA;
         public static float valueB;
+        // -----------------------------------------
 
         public static int initialResolutionX;
         public static int initialResolutionY;
@@ -68,6 +77,7 @@ namespace The_RPG_Prototype
             Content.RootDirectory = "Content";
             shouldBeFullScreen = true;
             debugOverlay = true;
+            debugShowHitBoxes = true;
             blockSize = 16;
         }
 
@@ -94,14 +104,11 @@ namespace The_RPG_Prototype
 
             // adding the player
             playerGameObject = new GameObject(GameObject.actorToInstantiate.Player, new Vector2(0f, 0f));
-            AllGameObjects.Add(playerGameObject);
             playerActor = playerGameObject.actor;
             player = playerActor.player;
 
             tileGameObj = new GameObject(GameObject.objectToInstantiate.Tile, new Vector2(0f, 256f));
-            AllGameObjects.Add(tileGameObj);
             tempTileGameObj = new GameObject(GameObject.objectToInstantiate.Tile, new Vector2(64f, 192f));
-            AllGameObjects.Add(tempTileGameObj);
 
             cam = new Camera2D
             {
@@ -164,6 +171,8 @@ namespace The_RPG_Prototype
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            valueA = (float)BoxCollider.AllBoxColliders.Count;
+
             deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             keyboardState = Keyboard.GetState();
 
@@ -173,6 +182,10 @@ namespace The_RPG_Prototype
             if (keyboardState.IsKeyDown(Keys.F3) && previousKeyboardState.IsKeyUp(Keys.F3))
             {
                 debugOverlay = !debugOverlay;
+            }
+            if (keyboardState.IsKeyDown(Keys.F9) && previousKeyboardState.IsKeyUp(Keys.F9))
+            {
+                debugShowHitBoxes = !debugShowHitBoxes;
             }
             if ( keyboardState.IsKeyDown(Keys.F11) && previousKeyboardState.IsKeyUp(Keys.F11) )
             {
@@ -273,8 +286,12 @@ namespace The_RPG_Prototype
             float spacing = 20f;
             float n = 2f;
             spriteBatch.Begin();
+
             spriteBatch.DrawString(Square, string.Format("FPS: {0}", fps), new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            n++;
+            spriteBatch.DrawString(Square, string.Format("Show hitboxes (F9): {0}", debugShowHitBoxes), new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
             n+=2;
+
             spriteBatch.DrawString(Square, "Blocks" , new Vector2(10f, titlePosY + spacing*n), Color.LightGray);
             n++;
             spriteBatch.DrawString(Square, "Mouse X (" + mouseWorldPos.X / (blockSize) + ")", new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
@@ -300,6 +317,14 @@ namespace The_RPG_Prototype
             spriteBatch.DrawString(Square, "Is Grounded: " + player.rigidbody.isGrounded, new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
             n++;
             spriteBatch.DrawString(Square, "Is Colliding: " + tempIsColliding, new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            n++;
+            spriteBatch.DrawString(Square, "Colliding down: " + collidingDown, new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            n++;
+            spriteBatch.DrawString(Square, "Colliding up: " + collidingUp, new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            n++;
+            spriteBatch.DrawString(Square, "Colliding right: " + collidingRight, new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
+            n++;
+            spriteBatch.DrawString(Square, "Colliding left: " + collidingLeft, new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
             n++;
             spriteBatch.DrawString(Square, "Value A: " + valueA, new Vector2(10f, titlePosY + spacing * n), Color.LightGray);
             n++;

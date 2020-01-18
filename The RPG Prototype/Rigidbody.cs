@@ -2,7 +2,7 @@
 
 namespace The_RPG_Prototype
 {
-    class Rigidbody
+    public class Rigidbody
     {
         public bool isEnabled;
         public Transform transform;
