@@ -19,6 +19,18 @@
 /processorParam:Quality=Best
 /build:Audio/SFX/FootstepGrass_1.wav
 
+#begin Sprites/temp_cursor.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/temp_cursor.png
+
 #begin Spritesheets/Human_Back_LowerArm_16x16.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -10,7 +10,7 @@ namespace The_RPG_Prototype
     /// </summary>
     public class Game1 : Game
     {
-        public static string GameVersion = "Indev 0.0.2a snapshot 3";
+        public static string GameVersion = "Indev 0.0.2a snapshot 4";
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -26,6 +26,7 @@ namespace The_RPG_Prototype
         GameObject tileGameObj;
         GameObject tempTileGameObj;
         Texture2D tilesetTexture;
+        Texture2D cursorTexture;
         public static Texture2D pixel;
 
         public const float gravityX = 0f;
@@ -93,7 +94,7 @@ namespace The_RPG_Prototype
             initialResolutionX = graphics.PreferredBackBufferWidth;
             initialResolutionY = graphics.PreferredBackBufferHeight;
             
-            this.IsMouseVisible = true;
+            IsMouseVisible = false;
             if (shouldBeFullScreen)
             {
                 graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
@@ -135,6 +136,8 @@ namespace The_RPG_Prototype
             Texture2D jumpTexture = Content.Load<Texture2D>("Spritesheets/Human_Jumping_50x36");
             Texture2D jumpChargeTexture = Content.Load<Texture2D>("Spritesheets/Human_JumpCharge_50x36");
             Texture2D fallTexture = Content.Load<Texture2D>("Spritesheets/Human_Falling_50x36");
+
+            cursorTexture = Content.Load<Texture2D>("Sprites/temp_cursor");
 
             Texture2D greyRock = Content.Load<Texture2D>("Tilesets/GreyRock");
 
@@ -216,7 +219,6 @@ namespace The_RPG_Prototype
                 }
             }
 
-            // TODO: Add your update logic here
             mouseState = Mouse.GetState();
             mouseScreenPos = new Vector2( mouseState.Position.X, mouseState.Position.Y);
             mouseWorldPos = mouseScreenPos + (player.transform.position - new Vector2(graphics.PreferredBackBufferWidth/2f, graphics.PreferredBackBufferHeight/2f));
@@ -268,8 +270,11 @@ namespace The_RPG_Prototype
             //tileset.Draw(spriteBatch, new Vector2(0, 18));
             spriteBatch.End();
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Immediate,
+                BlendState.AlphaBlend,
+                SamplerState.PointClamp);
             spriteBatch.DrawString(Square, "The RPG Prototype - " + GameVersion, new Vector2(10f, 10f), Color.White);
+            spriteBatch.Draw(cursorTexture, new Rectangle((int)mouseScreenPos.X, (int)mouseScreenPos.Y, 15, 15), Color.White);
             spriteBatch.End();
 
             if (debugOverlay)

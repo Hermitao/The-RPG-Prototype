@@ -61,10 +61,13 @@ namespace The_RPG_Prototype
             //    new Rectangle((int)x, (int)y, (int)width, (int)height),
             //    new Color((byte)RedValue, (byte)GreenValue, (byte)BlueValue, (byte)120));
 
-            spriteBatch.Draw(Pixel,
-                new Vector2(x, y),
-                new Rectangle((int)x, (int)y, (int)width, (int)height),
-                new Color((byte)RedValue, (byte)GreenValue, (byte)BlueValue, (byte)120) * .7f);
+            if (Game1.debugOverlay)
+            {
+                spriteBatch.Draw(Pixel,
+                    new Vector2(x, y),
+                    new Rectangle((int)x, (int)y, (int)width, (int)height),
+                    new Color((byte)RedValue, (byte)GreenValue, (byte)BlueValue, (byte)120) * .7f);
+            }
         }
 
         public bool OnCollisionStay()
